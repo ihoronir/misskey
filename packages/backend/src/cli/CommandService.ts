@@ -9,6 +9,8 @@ import { DI } from '@/di-symbols.js';
 import type Logger from '@/logger.js';
 import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
+import { QueueService } from '@/core/QueueService.js'
+import type { UsersRepository} from ':/models/_.js'
 
 @Injectable()
 export class CommandService {
@@ -18,7 +20,11 @@ export class CommandService {
 		@Inject(DI.config)
 		private config: Config,
 
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
+
 		private metaService: MetaService,
+		private queueService: QueueService,
 	) {
 	}
 
@@ -45,5 +51,27 @@ export class CommandService {
 			turnstileSecretKey: null,
 			enableTestcaptcha: false,
 		});
+	}
+
+	@bindThis
+	public async cleanupDeletedUsers() {
+		const deletedUsers = await this.usersRepository.find({
+			where: {
+				isDeleted: true,
+				host: Not(IsNull()),
+			},
+			select: ['id'],
+		});
+
+		console.log(`Found ${deletedUsers.length} deleted remote users`);
+
+		for (const user of deletedUsers) {
+			await this.queueSErvice.createDeleteAccountJob(user, {
+				soft: false,
+			});
+			console.log(`Queued deletion job for user ${user.id}`);
+		}
+
+		console.log('Cleanup completed');
 	}
 }
