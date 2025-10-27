@@ -9,8 +9,8 @@ import { DI } from '@/di-symbols.js';
 import type Logger from '@/logger.js';
 import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
-import { QueueService } from '@/core/QueueService.js'
-import type { UsersRepository} from '@/models/_.js'
+import { QueueService } from '@/core/QueueService.js';
+import type { UsersRepository } from '@/models/_.js';
 import { IsNull, Not } from 'typeorm';
 
 @Injectable()
