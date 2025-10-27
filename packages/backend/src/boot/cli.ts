@@ -41,7 +41,7 @@ switch (command) {
 	}
 	case 'cleanup-deleted-users': {
 		await commandService.cleanupDeletedUsers();
-		console.log('Deleted users have been cleaned');
+		console.log('Deleted users have been cleaned.');
 		break;
 	}
 	default: {

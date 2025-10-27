@@ -10,7 +10,7 @@ import type Logger from '@/logger.js';
 import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
 import { QueueService } from '@/core/QueueService.js'
-import type { UsersRepository} from ':/models/_.js'
+import type { UsersRepository} from '@/models/_.js'
 
 @Injectable()
 export class CommandService {
@@ -66,7 +66,7 @@ export class CommandService {
 		console.log(`Found ${deletedUsers.length} deleted remote users`);
 
 		for (const user of deletedUsers) {
-			await this.queueSErvice.createDeleteAccountJob(user, {
+			await this.queueService.createDeleteAccountJob(user, {
 				soft: false,
 			});
 			console.log(`Queued deletion job for user ${user.id}`);
