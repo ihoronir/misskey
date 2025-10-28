@@ -39,6 +39,11 @@ switch (command) {
 		console.log('Captcha has been reset.');
 		break;
 	}
+	case 'cleanup-deleted-users': {
+		await commandService.cleanupDeletedUsers();
+		console.log('Deleted users have been cleaned.');
+		break;
+	}
 	default: {
 		console.error(`Unrecognized command: ${command}`);
 		console.error('Use "help" to see available commands.');
