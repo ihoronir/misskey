@@ -13,6 +13,10 @@ import { QueueService } from '@/core/QueueService.js';
 import type { UsersRepository } from '@/models/_.js';
 import { IsNull, Not } from 'typeorm';
 
+async function sleep(ms = 250): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 @Injectable()
 export class CommandService {
 	private logger: Logger;
@@ -71,6 +75,7 @@ export class CommandService {
 				soft: false,
 			});
 			console.log(`Queued deletion job for user ${user.id}`);
+			await sleep(1000);
 		}
 
 		console.log('Cleanup completed');
