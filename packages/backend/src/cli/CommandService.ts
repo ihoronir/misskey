@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { IsNull, Not } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
@@ -11,7 +12,6 @@ import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
 import { QueueService } from '@/core/QueueService.js';
 import type { UsersRepository } from '@/models/_.js';
-import { IsNull, Not } from 'typeorm';
 
 async function sleep(ms = 250): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -65,7 +65,7 @@ export class CommandService {
 				isDeleted: true,
 				host: Not(IsNull()),
 			},
-			select: ['id'],
+			select: { id: true },
 		});
 
 		console.log(`Found ${deletedUsers.length} deleted remote users`);
