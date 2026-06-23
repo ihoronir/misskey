@@ -137,7 +137,7 @@ export class CommandService {
 				soft: false,
 			});
 			console.log(`Queued deletion job for user ${user.id}: @${user.username}@${user.host}`);
-			await sleep(1000);
+			await sleep(100);
 		}
 
 		console.log('Queueing completed');
