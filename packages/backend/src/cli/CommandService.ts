@@ -59,14 +59,33 @@ export class CommandService {
 	}
 
 	@bindThis
-	public async cleanupDeletedUsers() {
-		const deletedUsers = await this.usersRepository.find({
+	private async getDeletedRemoteUsers() {
+		return await this.usersRepository.find({
 			where: {
 				isDeleted: true,
 				host: Not(IsNull()),
 			},
-			select: { id: true },
+			select: {
+				id: true,
+				username: true,
+				host: true,
+			},
 		});
+	}
+	@bindThis
+	public async showDeletedRemoteUsers() {
+		const deletedUsers = await this.getDeletedRemoteUsers();
+
+		console.log(`Found ${deletedUsers.length} deleted remote users:`);
+
+		for (const user of deletedUsers) {
+			console.log(`- ${user.id}: @${user.username}@${user.host}`);
+		}
+	}
+
+	@bindThis
+	public async cleanupDeletedRemoteUsers() {
+		const deletedUsers = await this.getDeletedRemoteUsers();
 
 		console.log(`Found ${deletedUsers.length} deleted remote users`);
 
@@ -74,7 +93,7 @@ export class CommandService {
 			await this.queueService.createDeleteAccountJob(user, {
 				soft: false,
 			});
-			console.log(`Queued deletion job for user ${user.id}`);
+			console.log(`Queued deletion job for user ${user.id}: @${user.username}@${user.host}`);
 			await sleep(1000);
 		}
 
