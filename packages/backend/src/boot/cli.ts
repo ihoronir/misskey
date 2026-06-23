@@ -28,9 +28,9 @@ switch (command) {
 		console.log('Available commands:');
 		console.log('  help - Displays this help message');
 		console.log('  reset-captcha - Resets the captcha');
-		console.log('  cleanup-deleted-remote-users - Cleanup deleted remote users');
-		console.log('  show-deleted-remote-users - Shows deleted remote users');
-		console.log('  get-users-by-host <host> - Lists users by host');
+		console.log('  show-deleted-remote-users - Shows remote users deleted logically');
+		console.log('  delete-deleted-remote-users - Deletes remote users deleted logically');
+		console.log('  show-users-by-host <host> - Shows users by host');
 		console.log('  delete-users-by-host <host> - Deletes users by host');
 		break;
 	}
@@ -47,12 +47,11 @@ switch (command) {
 		await commandService.showDeletedRemoteUsers();
 		break;
 	}
-	case 'cleanup-deleted-remote-users': {
-		await commandService.cleanupDeletedRemoteUsers();
-		console.log('Deleted users have been cleaned.');
+	case 'delete-deleted-remote-users': {
+		await commandService.deleteDeletedRemoteUsers();
 		break;
 	}
-	case 'get-users-by-host': {
+	case 'show-users-by-host': {
 		const host = process.argv[3];
 		if (!host) {
 			console.error('Please provide a host.');
