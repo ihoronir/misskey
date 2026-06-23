@@ -99,7 +99,7 @@ export class CommandService {
 	}
 
 	@bindThis
-	public async cleanupDeletedRemoteUsers() {
+	public async deleteDeletedRemoteUsers() {
 		const deletedUsers = await this.getDeletedRemoteUsers();
 
 		console.log(`Found ${deletedUsers.length} deleted remote users`);
@@ -112,7 +112,7 @@ export class CommandService {
 			await sleep(1000);
 		}
 
-		console.log('Cleanup completed');
+		console.log('Queueing completed');
 	}
 
 	@bindThis
@@ -140,6 +140,6 @@ export class CommandService {
 			await sleep(1000);
 		}
 
-		console.log('Deletion completed');
+		console.log('Queueing completed');
 	}
 }
