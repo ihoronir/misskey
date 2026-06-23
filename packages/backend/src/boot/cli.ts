@@ -28,6 +28,8 @@ switch (command) {
 		console.log('Available commands:');
 		console.log('  help - Displays this help message');
 		console.log('  reset-captcha - Resets the captcha');
+		console.log('  cleanup-deleted-remote-users - Cleanup deleted remote users');
+		console.log('  show-deleted-remote-users - Shows deleted remote users');
 		break;
 	}
 	case 'ping': {
@@ -39,8 +41,12 @@ switch (command) {
 		console.log('Captcha has been reset.');
 		break;
 	}
-	case 'cleanup-deleted-users': {
-		await commandService.cleanupDeletedUsers();
+	case 'show-deleted-remote-users': {
+		await commandService.showDeletedRemoteUsers();
+		break;
+	}
+	case 'cleanup-deleted-remote-users': {
+		await commandService.cleanupDeletedRemoteUsers();
 		console.log('Deleted users have been cleaned.');
 		break;
 	}
