@@ -30,6 +30,8 @@ switch (command) {
 		console.log('  reset-captcha - Resets the captcha');
 		console.log('  cleanup-deleted-remote-users - Cleanup deleted remote users');
 		console.log('  show-deleted-remote-users - Shows deleted remote users');
+		console.log('  get-users-by-host <host> - Lists users by host');
+		console.log('  delete-users-by-host <host> - Deletes users by host');
 		break;
 	}
 	case 'ping': {
@@ -48,6 +50,24 @@ switch (command) {
 	case 'cleanup-deleted-remote-users': {
 		await commandService.cleanupDeletedRemoteUsers();
 		console.log('Deleted users have been cleaned.');
+		break;
+	}
+	case 'get-users-by-host': {
+		const host = process.argv[3];
+		if (!host) {
+			console.error('Please provide a host.');
+			process.exit(1);
+		}
+		await commandService.showUsersByHost(host);
+		break;
+	}
+	case 'delete-users-by-host': {
+		const host = process.argv[3];
+		if (!host) {
+			console.error('Please provide a host.');
+			process.exit(1);
+		}
+		await commandService.deleteUsersByHost(host);
 		break;
 	}
 	default: {

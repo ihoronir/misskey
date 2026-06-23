@@ -72,6 +72,21 @@ export class CommandService {
 			},
 		});
 	}
+
+	@bindThis
+	private async getUsersByHost(host: string) {
+		return await this.usersRepository.find({
+			where: {
+				host: host,
+			},
+			select: {
+				id: true,
+				username: true,
+				host: true,
+			},
+		});
+	}
+
 	@bindThis
 	public async showDeletedRemoteUsers() {
 		const deletedUsers = await this.getDeletedRemoteUsers();
@@ -98,5 +113,33 @@ export class CommandService {
 		}
 
 		console.log('Cleanup completed');
+	}
+
+	@bindThis
+	public async showUsersByHost(host: string) {
+		const users = await this.getUsersByHost(host);
+
+		console.log(`Found ${users.length} users for host ${host}:`);
+
+		for (const user of users) {
+			console.log(`- ${user.id}: @${user.username}@${user.host}`);
+		}
+	}
+
+	@bindThis
+	public async deleteUsersByHost(host: string) {
+		const users = await this.getUsersByHost(host);
+
+		console.log(`Found ${users.length} users for host ${host}`);
+
+		for (const user of users) {
+			await this.queueService.createDeleteAccountJob(user, {
+				soft: false,
+			});
+			console.log(`Queued deletion job for user ${user.id}: @${user.username}@${user.host}`);
+			await sleep(1000);
+		}
+
+		console.log('Deletion completed');
 	}
 }
