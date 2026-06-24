@@ -32,6 +32,9 @@ switch (command) {
 		console.log('  delete-deleted-remote-users - Deletes remote users deleted logically');
 		console.log('  show-users-by-host <host> - Shows users by host');
 		console.log('  delete-users-by-host <host> - Deletes users by host');
+		console.log('  summary-hosts - Summarizes users by host');
+		console.log('  summary-hosts-response - Summarizes host responses');
+		console.log('  delete-users-by-host-response-category <category> - Deletes users from hosts by response category');
 		break;
 	}
 	case 'ping': {
@@ -67,6 +70,23 @@ switch (command) {
 			process.exit(1);
 		}
 		await commandService.deleteUsersByHost(host);
+		break;
+	}
+	case 'summary-hosts': {
+		await commandService.summaryHosts();
+		break;
+	}
+	case 'summary-hosts-response': {
+		await commandService.summaryHostsResponse();
+		break;
+	}
+	case 'delete-users-by-host-response-category': {
+		const category = process.argv[3];
+		if (!category) {
+			console.error('Please provide a category.');
+			process.exit(1);
+		}
+		await commandService.deleteUsersByHostResponseCategory(category);
 		break;
 	}
 	default: {
