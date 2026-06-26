@@ -172,7 +172,7 @@ export class CommandService {
 		try {
 			const res = await this.httpRequestService.send(url, {
 				method: 'GET',
-				timeout: 5000,
+				timeout: 30000,
 			}, {
 				throwErrorWhenResponseNotOk: false,
 			});
@@ -186,14 +186,21 @@ export class CommandService {
 	private categorizeNetworkError(err: unknown): string {
 		const msg = err instanceof Error ? err.message : String(err);
 		if (
-			msg.includes('timeout') ||
+			msg.includes('timeout')
+		) {
+			return 'Timeout';
+		} else if (
 			msg.includes('aborted') ||
 			msg.includes('socket hang up') ||
 			msg.includes('ECONNRESET') ||
 			msg.includes('ECONNREFUSED') ||
 			msg.includes('Client network socket disconnected')
 		) {
-			return 'Timeout/Connection Reset';
+			return 'Connection Reset';
+		} else if (
+			msg.includes('EHOSTUNREACH')
+		) {
+			return 'Unreachable';
 		} else if (
 			msg.includes('ENOTFOUND') ||
 			msg.includes('EAI_AGAIN') ||
